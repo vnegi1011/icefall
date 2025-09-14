@@ -68,6 +68,13 @@ def normalize_text(utt: str, language: str) -> str:
             string=utt,
         )
     else:
+        if language == "ky":
+            utt = utt.lower()  # lowercase
+            # remove common punctuation
+            utt = re.sub(r"[，。？！?,!]", "", utt)
+            # collapse multiple spaces
+            utt = " ".join(utt.split())
+            return utt
         raise NotImplementedError(
             f"""
             Text normalization not implemented for language: {language},
