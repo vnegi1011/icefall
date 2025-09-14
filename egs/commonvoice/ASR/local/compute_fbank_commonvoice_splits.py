@@ -22,13 +22,11 @@ from pathlib import Path
 
 import torch
 from lhotse import (
-    CutSet,
-    KaldifeatFbank,
-    KaldifeatFbankConfig,
-    LilcomChunkyWriter,
     set_audio_duration_mismatch_tolerance,
     set_caching_enabled,
 )
+from lhotse import CutSet, Fbank, FbankConfig, LilcomChunkyWriter
+
 
 from icefall.utils import str2bool
 
@@ -123,7 +121,7 @@ def compute_fbank_commonvoice_splits(args):
     device = torch.device("cpu")
     if torch.cuda.is_available():
         device = torch.device("cuda", 0)
-    extractor = KaldifeatFbank(KaldifeatFbankConfig(device=device))
+    extractor = Fbank(FbankConfig())
     logging.info(f"device: {device}")
 
     set_audio_duration_mismatch_tolerance(0.05)  # 50ms tolerance
