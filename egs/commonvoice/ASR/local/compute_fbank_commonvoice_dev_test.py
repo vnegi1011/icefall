@@ -31,7 +31,7 @@ from typing import Optional
 
 import torch
 from filter_cuts import filter_cuts
-from lhotse import CutSet, KaldifeatFbank, KaldifeatFbankConfig, LilcomChunkyWriter
+from lhotse import CutSet, Fbank, FbankConfig, LilcomChunkyWriter
 
 # Torch's multithreaded behavior needs to be disabled or
 # it wastes a lot of CPU and slow things down.
@@ -64,8 +64,7 @@ def compute_fbank_commonvoice_dev_test(language: str):
     device = torch.device("cpu")
     if torch.cuda.is_available():
         device = torch.device("cuda", 0)
-    extractor = KaldifeatFbank(KaldifeatFbankConfig(device=device))
-
+    extractor = Fbank(FbankConfig())
     logging.info(f"device: {device}")
 
     for partition in subsets:
