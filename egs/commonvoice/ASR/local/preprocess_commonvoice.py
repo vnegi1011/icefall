@@ -75,6 +75,13 @@ def normalize_text(utt: str, language: str) -> str:
             # collapse multiple spaces
             utt = " ".join(utt.split())
             return utt
+        elif language == "ru":
+            utt = utt.lower()  # lowercase
+            # remove common punctuation for Russian (including Cyrillic-specific ones)
+            utt = re.sub(r"[.,?!;:\-\"\'«»()]", "", utt)
+            # collapse multiple spaces
+            utt = " ".join(utt.split())
+            return utt
         raise NotImplementedError(
             f"""
             Text normalization not implemented for language: {language},
