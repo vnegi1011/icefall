@@ -52,6 +52,22 @@ def normalize_text(utt: str, language: str) -> str:
         return re.sub(r"[^A-ZÀÂÆÇÉÈÊËÎÏÔŒÙÛÜ' ]", "", utt).upper()
     elif language == "pl":
         return re.sub(r"[^a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ' ]", "", utt).upper()
+    elif language == "ky":
+        utt = utt.lower()  # Convert to lowercase for consistency
+        # Define valid Kyrgyz Cyrillic characters (including specific letters: ң, ү, ө)
+        valid_chars = r"[а-яңүө\s]"  # Allow Cyrillic letters used in Kyrgyz and spaces
+        # Remove all characters except valid Kyrgyz Cyrillic letters and spaces
+        utt = re.sub(r"[^а-яңүө\s]", "", utt)
+        # Collapse multiple spaces
+        utt = " ".join(utt.split())
+        return utt
+    elif language == "ru":
+        utt = utt.lower()  # lowercase
+        # remove common punctuation for Russian (including Cyrillic-specific ones)
+        utt = re.sub(r"[.,?!;:\-\"\'«»()]", "", utt)
+        # collapse multiple spaces
+        utt = " ".join(utt.split())
+        return utt
     elif language in ["yue", "zh-HK"]:
         # Mozilla Common Voice uses both "yue" and "zh-HK" for Cantonese
         # Not sure why they decided to do this...
@@ -68,20 +84,6 @@ def normalize_text(utt: str, language: str) -> str:
             string=utt,
         )
     else:
-        if language == "ky":
-            utt = utt.lower()  # lowercase
-            # remove common punctuation
-            utt = re.sub(r"[，。？！?,!]", "", utt)
-            # collapse multiple spaces
-            utt = " ".join(utt.split())
-            return utt
-        elif language == "ru":
-            utt = utt.lower()  # lowercase
-            # remove common punctuation for Russian (including Cyrillic-specific ones)
-            utt = re.sub(r"[.,?!;:\-\"\'«»()]", "", utt)
-            # collapse multiple spaces
-            utt = " ".join(utt.split())
-            return utt
         raise NotImplementedError(
             f"""
             Text normalization not implemented for language: {language},
