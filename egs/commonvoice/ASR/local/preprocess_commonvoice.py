@@ -53,14 +53,19 @@ def normalize_text(utt: str, language: str) -> str:
     elif language == "pl":
         return re.sub(r"[^a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ' ]", "", utt).upper()
     elif language == "ky":
-        utt = utt.lower()  # Convert to lowercase for consistency
-        # Define valid Kyrgyz Cyrillic characters (including specific letters: ң, ү, ө)
-        valid_chars = r"[а-яңүө\s]"  # Allow Cyrillic letters used in Kyrgyz and spaces
-        # Remove all characters except valid Kyrgyz Cyrillic letters and spaces
-        utt = re.sub(r"[^а-яңүө\s]", "", utt)
-        # Collapse multiple spaces
-        utt = " ".join(utt.split())
-        return utt
+
+        # Kyrgyz Cyrillic + common Cyrillic extensions
+        kyrgyz_cyrillic = "а-яёәіңғүұқөһӘІҢҒҮҰҚӨҪ"
+        # Latin (A-Z, a-z), Digits, Accented Latin (À-ÖØ-öø-ÿ)
+        latin_digits = "A-Za-z0-9À-ÖØ-öø-ÿ"
+        # Combining marks (for accents like é, ê, etc.)
+        accents = "́̂̀"  # U+0301 (acute), U+0302 (circumflex), U+0300 (grave)
+        # Allowed punctuation
+        punctuation = "’' ,.?!-"
+
+        pattern = fr"[^{kyrgyz_cyrillic}{latin_digits}{accents}{punctuation}]"
+
+        return re.sub(pattern, " ", words).lower()
     elif language == "ru":
         utt = utt.lower()  # lowercase
         # remove common punctuation for Russian (including Cyrillic-specific ones)
