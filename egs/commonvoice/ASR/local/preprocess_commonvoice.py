@@ -65,7 +65,7 @@ def normalize_text(utt: str, language: str) -> str:
 
         pattern = fr"[^{kyrgyz_cyrillic}{latin_digits}{accents}{punctuation}]"
 
-        return re.sub(pattern, " ", words).lower()
+        return re.sub(pattern, " ", utt).lower()
     elif language == "ru":
         utt = utt.lower()  # lowercase
         # remove common punctuation for Russian (including Cyrillic-specific ones)
